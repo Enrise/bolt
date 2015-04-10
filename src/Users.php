@@ -181,7 +181,7 @@ class Users
     {
         if ($this->app['session']->get('user')) {
             $this->currentuser = $this->app['session']->get('user');
-            if ($database = $this->getUser($this->currentuser['id'])) {
+            if ($database = $this->getUserById($this->currentuser['id'])) {
                 // Update the session with the user from the database.
                 $this->currentuser = array_merge($this->currentuser, $database);
             } else {
@@ -387,7 +387,7 @@ class Users
      */
     public function deleteUser($id)
     {
-        $user = $this->getUser($id);
+        $user = $this->getUserById($id);
 
         if (empty($user['id'])) {
             $this->session->getFlashBag()->add('error', Trans::__('That user does not exist.'));
@@ -542,7 +542,7 @@ class Users
         $checksalt = $this->getAuthToken($row['username'], $row['salt']);
 
         if ($checksalt === $row['token']) {
-            $user = $this->getUser($row['username']);
+            $user = $this->getUserByUsername($row['username']);
 
             $update = array(
                 'lastseen'       => date('Y-m-d H:i:s'),
@@ -586,7 +586,7 @@ class Users
 
     public function resetPasswordRequest($username)
     {
-        $user = $this->getUser($username);
+        $user = $this->getUserByUsername($username);
         $recipients = false;
 
         if (!empty($user)) {
@@ -922,7 +922,7 @@ class Users
      */
     public function setEnabled($id, $enabled = 1)
     {
-        $user = $this->getUser($id);
+        $user = $this->getUserById($id);
 
         if (empty($user)) {
             return false;
@@ -943,7 +943,7 @@ class Users
      */
     public function hasRole($id, $role)
     {
-        $user = $this->getUser($id);
+        $user = $this->getUserById($id);
 
         if (empty($user)) {
             return false;
@@ -962,7 +962,7 @@ class Users
      */
     public function addRole($id, $role)
     {
-        $user = $this->getUser($id);
+        $user = $this->getUserById($id);
 
         if (empty($user) || empty($role)) {
             return false;
@@ -984,7 +984,7 @@ class Users
      */
     public function removeRole($id, $role)
     {
-        $user = $this->getUser($id);
+        $user = $this->getUserById($id);
 
         if (empty($user) || empty($role)) {
             return false;
@@ -1008,7 +1008,7 @@ class Users
     public function filterManipulatableRoles($id, array $newRoles)
     {
         $oldRoles = array();
-        if ($id && $user = $this->getUser($id)) {
+        if ($id && $user = $this->getUserById($id)) {
             $oldRoles = $user['roles'];
         }
 
