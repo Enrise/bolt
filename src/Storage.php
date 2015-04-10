@@ -151,8 +151,8 @@ class Storage
         $content['datepublish'] = date('Y-m-d H:i:s', time() - rand(0, 365 * 24 * 60 * 60));
         $content['datedepublish'] = null;
 
-        $username = array_rand($this->app['users']->getUsers());
-        $user = $this->app['users']->getUser($username);
+        $username = array_rand($this->app['users']->getUsers(), 1);
+        $user = $this->app['users']->getUserByUsername($username);
 
         $content['ownerid'] = $user['id'];
 
